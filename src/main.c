@@ -64,6 +64,7 @@ double ** k_means(double **x, int dim_x, int len_x, int k)
     int curr_class;
     int not_converged = 1;
     int iter = 0;
+    int rand_x;
 
     m = malloc(k * sizeof m);
     m_next = malloc(k * sizeof m_next);
@@ -72,8 +73,10 @@ double ** k_means(double **x, int dim_x, int len_x, int k)
     for (int i = 0; i < k; ++i) {
         m[i] = malloc(dim_x * sizeof *m);
         m_next[i] = calloc(dim_x, sizeof *m_next);
+        
+        rand_x = rand() / (RAND_MAX / len_x);
         for (int j = 0; j < dim_x; ++j) {
-            m[i][j] = (double) rand() / RAND_MAX;
+            m[i][j] = x[rand_x][j];
         }
     }
 
@@ -122,6 +125,8 @@ int main(int argc, char **agrv)
     int len_x = 92;
     int k = 4;
     double **x, **m;
+
+    srand(1);
 
     x = read_csv("data/iris.csv", dim_x, len_x);
     
