@@ -1,6 +1,33 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
+
+
+double ** read_csv(char *filepath, int dim_x, int len_x)
+{
+    const int MAX_LEN = 128;
+    FILE *fp = fopen(filepath, "r");
+    char line[MAX_LEN];
+    char *token;
+    double *x_line, **x;
+    int c = 0, i = 0;
+
+    x = malloc(len_x * sizeof x);
+
+    while (fgets(line, MAX_LEN, fp)) {
+        x_line = malloc(dim_x * sizeof x_line);
+        token = strtok(line, ",");
+        while (token) {
+            x_line[c++] = strtod(token, NULL);
+            token = strtok(NULL, ",");
+        }
+        c = 0;
+        x[i++] = x_line;
+    }
+
+    return x;
+}
 
 
 double dist_sq(double *x, double *y, int len)
@@ -52,7 +79,6 @@ double ** k_means(double **x, int dim_x, int len_x, int k)
 
     do {
         /*  Classify all of the data points to the current class means
-            x_class keeps track of which class each data point belongs to
             k_count keeps track of the number of data points for each class
         */
         for (int j = 0; j < len_x; ++j) {
@@ -92,22 +118,13 @@ double ** k_means(double **x, int dim_x, int len_x, int k)
 
 int main(int argc, char **agrv)
 {
-    int dim_x = 2;
-    int len_x = 50;
+    int dim_x = 4;
+    int len_x = 92;
     int k = 4;
     double **x, **m;
 
-    x = malloc(len_x * sizeof x);
+    x = read_csv("data/iris.csv", dim_x, len_x);
     
-    srand(14);
-
-    for (int i = 0; i < len_x; ++i) {
-        x[i] = malloc(dim_x * sizeof x[i]);
-        for (int j = 0; j < dim_x; ++j) {
-            x[i][j] = (double) rand() / RAND_MAX;
-        }
-    }
-
     m = k_means(x, dim_x, len_x, k);
 
     for (int i = 0; i < k; i++) {
