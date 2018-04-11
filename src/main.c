@@ -73,7 +73,8 @@ double ** k_means(double **x, int dim_x, int len_x, int k)
     for (int i = 0; i < k; ++i) {
         m[i] = malloc(dim_x * sizeof *m);
         m_next[i] = calloc(dim_x, sizeof *m_next);
-        
+        k_count[i] = 0;
+
         rand_x = rand() / (RAND_MAX / len_x);
         for (int j = 0; j < dim_x; ++j) {
             m[i][j] = x[rand_x][j];
@@ -97,8 +98,8 @@ double ** k_means(double **x, int dim_x, int len_x, int k)
         for (int j = 0; j < k; ++j) {
             for (int l = 0; l < dim_x; ++l) {
                 m_next[j][l] /= (k_count[j] == 0) ? 1 : k_count[j]; // Guarding against 0 division
-                k_count[j] = 0; // Zero out the bins for next iteration
             }
+            k_count[j] = 0; // Zero out the bins for next iteration
         }
 
         /*  Compute the exit condition
