@@ -45,7 +45,7 @@ int nearest_mean(double *x, double **means, int dim_x, int k)
     double dist;
     double min = INFINITY;
     int i_min = -1;
-    
+
     for (int i = 0; i < k; ++i) {
         dist = dist_sq(x, means[i], dim_x);
         if (dist < min) {
@@ -114,13 +114,13 @@ double ** k_means(double **x, int dim_x, int len_x, int k)
                 m_next[j][l] = 0;
             }
         }
-    } while (not_converged && iter++ < 100);
+    } while (not_converged && iter++ < 1000);
 
     return m;
 }
 
 
-int main(int argc, char **agrv)
+int main(int argc, char **argv)
 {
     int dim_x = 4;
     int len_x = 92;
@@ -129,8 +129,28 @@ int main(int argc, char **agrv)
 
     srand(1);
 
-    x = read_csv("data/iris.csv", dim_x, len_x);
-    
+    char *file_name;
+    FILE *fp;
+
+    if (argc >= 2)
+         file_name = argv[1];
+         if (argc >= 3)
+            dim_x = atoi(argv[2]);
+            if (argc >= 4)
+               len_x = atoi(argv[3]);
+               if (argc >= 5)
+                  k = atoi(argv[4]);
+
+    else file_name = "data/iris.csv";
+    printf("\n");
+    printf("Data: %s\n",file_name);
+    printf("Number of points: %d\n", len_x);
+    printf("Number of dimensions: %d\n", dim_x);
+    printf("Number of clusters: %d\n", k);
+    printf("Running...\n");
+
+    x = read_csv(file_name, dim_x, len_x);
+
     m = k_means(x, dim_x, len_x, k);
 
     for (int i = 0; i < k; i++) {
@@ -142,4 +162,3 @@ int main(int argc, char **agrv)
 
     return 0;
 }
-
