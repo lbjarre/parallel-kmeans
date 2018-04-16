@@ -5,7 +5,6 @@ url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00344/Activity%
 
 path = "data/data.zip"
 
-
 print("Downloading 771 mb")
 
 urllib2.urlretrieve(url, path)
