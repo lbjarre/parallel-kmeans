@@ -41,6 +41,15 @@ int * displacements(int N, int P)
   return I;
 }
 
+void printPartition(double **x, int I, int dim_x){
+  for (int i = 0; i < I; i++) {
+    for (int j = 0; j < dim_x; j++) {
+        printf("%f, ", x[i][j]);
+    }
+    printf("\n");
+  }
+}
+
 int * initSeeds(int K, int N)
 {
   int * seeds;
@@ -64,7 +73,7 @@ double ** assignSeeds(double **data, int *seeds, int K, int dim_x){
   return clusters;
 }
 
-double ** read_parallel_csv(MPI_File *in, const int p, const int P, int *offset, const int overlap)
+double ** read_parallel_csv(MPI_File in, const int p, const int P, const int overlap, int len_x, int dim_x)
 {
   char *file_part;
   int sum;
@@ -74,65 +83,80 @@ double ** read_parallel_csv(MPI_File *in, const int p, const int P, int *offset,
   MPI_Offset file_size;
   MPI_Offset global_end;
   MPI_Offset global_start;
-  printf("bajs\n");
 
-  MPI_File_get_size(*in, &file_size);
+  MPI_File_get_size(in, &file_size);
+  printf("%lli\n", file_size);
   file_size--; //remove EOF.
   my_file_size = (file_size + P - p - 1) / P; //partition size
 
   global_start = 0;
-  for (int i = 0; i < p-1; i++) {
-    global_start = global_start + offset[i];
+  for (int i = 0; i < p; i++) {
+    global_start = global_start + (file_size + P - i -1) / P;
   }
   global_end = global_start + my_file_size - 1;
-
-  printf("global start: %lli\n",global_start);
-  printf("global end: %lli\n",global_end);
-
-
-  /*
-  if (p == P-1) global_end = file_size-1;
 
   if (p != P-1) {
     global_end += overlap;
   }
 
+  my_file_size =  global_end - global_start + 1;
+
   file_part = malloc(my_file_size * sizeof file_part);
 
-  MPI_File_read_at_all(*in, global_start, file_part, my_file_size, MPI_CHAR, MPI_STATUS_IGNORE);
+  MPI_File_read_at_all(in, global_start, file_part, my_file_size, MPI_CHAR, MPI_STATUS_IGNORE);
   file_part[my_file_size] = '\0';
 
+  int loc_start = 0, loc_end = my_file_size - 1;
+  if (p != 0) {
+      while(file_part[loc_start] != '\n') loc_start++;
+      loc_start++;
+  }
+  if (p != P-1){
+      loc_end-=overlap;
+      while(file_part[loc_end] != '\n') loc_end++;
+  }
 
-    const int MAX_LEN = 128;
-    FILE *fp = fopen(filepath, "r");
-    char line[MAX_LEN];
-    char *token;
-    double *x_line, **x;
-    int c = 0, i = 0;
+  my_file_size = loc_end - loc_start + 1;
+  file_part[loc_end+1] = '\n';
 
-    x = malloc(len_x * sizeof x);
+  int i = 0, c = 0, j = 0, I;
+  I = (len_x + P - p - 1) / P;
+  char line[overlap];
+  double *x_line;
+  char *token;
+  double dig;
 
-    while (fgets(line, MAX_LEN, fp)) {
-        x_line = malloc(dim_x * sizeof x_line);
-        token = strtok(line, ",");
-        while (token) {
-            x_line[c++] = strtod(token, NULL);
-            token = strtok(NULL, ",");
-        }
-        c = 0;
-        x[i++] = x_line;
+  x = malloc(I * sizeof x);
+
+  printf("%d\n",my_file_size);
+  for(int n = loc_start; n <= loc_end; ++n){
+    //if(p==1) printf("%c\n", file_part[n] );
+    if (file_part[n] != '\n') {
+      line[j++] = file_part[n];
+
+    } else {
+
+      x_line = malloc(dim_x * sizeof x_line);
+      token = strtok(line, ",");
+
+      while(token) {
+        x_line[c++] = strtod(token, NULL);
+        token = strtok(NULL, ",");
+      }
+      //printf("%d\n", n);
+      c = 0;
+      j = 0;
+      x[i++] = x_line;
+      if(p==1) printf("%s\n", line);
     }
-
-    return x;*/
+  }
 
   return x;
-
-
 }
 
 int main(int argc, char **argv)
 {
-  int rank, tag, rc, displs, P, p;
+  int rank, tag, rc, displs, P, p, I;
   int *sendcounts, *offset, *seeds;
   double **data, **x, **m, **rec_buf;
 
@@ -171,12 +195,19 @@ int main(int argc, char **argv)
   if (p == 0) {
     printInfo(file_name, len_x, dim_x, k);
   }
-  int overlap = 50;
+  int overlap = 200;
   offset = displacements(len_x, P);
 
   MPI_File_open(MPI_COMM_WORLD, file_name, MPI_MODE_RDONLY, MPI_INFO_NULL, &fp);
 
-  //read_parallel_csv(fp, p, P, offset, overlap);
+  x = read_parallel_csv(fp, p, P, overlap, len_x, dim_x);
+
+  I = (len_x + P - p - 1) / P;
+  if (p == 1) {
+      //printPartition(x, I, dim_x);
+  }
+
+
 
   /*
   sendcounts = partition(len_x, P);
@@ -192,5 +223,4 @@ int main(int argc, char **argv)
 
   rc = MPI_Finalize();
   return 0;
-
 }
