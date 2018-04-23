@@ -47,6 +47,9 @@ int * displacements(int N, int P)
 
 
 void printPartition(double **x, int I, int dim_x){
+  /*
+  Function for debugging
+  */
   for (int i = 0; i < I; i++) {
     for (int j = 0; j < dim_x; j++) {
         printf("%f, ", x[i][j]);
@@ -84,9 +87,12 @@ double ** assignSeeds(double **data, int *seeds, int K, int dim_x)
 
 double ** read_parallel_csv(MPI_File in, const int p, const int P, const int overlap, int len_x, int dim_x)
 {
+  /*
+    Reads from file in parallel.
+  */
   char *file_part;
   int sum;
-  int my_file_size;
+  int loc_file_size;
   double ** x;
 
   MPI_Offset file_size;
@@ -94,28 +100,26 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
   MPI_Offset global_start;
 
   MPI_File_get_size(in, &file_size);
-  printf("%lli\n", file_size);
-  //file_size--; //remove EOF.
-  my_file_size = (file_size + P - p - 1) / P; //partition size
+  loc_file_size = (file_size + P - p - 1) / P; //partition size
 
   global_start = 0;
   for (int i = 0; i < p; i++) {
     global_start = global_start + (file_size + P - i -1) / P;
   }
-  global_end = global_start + my_file_size - 1;
+  global_end = global_start + loc_file_size - 1;
 
   if (p != P-1) {
     global_end += overlap;
   }
 
-  my_file_size =  global_end - global_start + 1;
+  loc_file_size =  global_end - global_start + 1;
 
-  file_part = malloc(my_file_size * sizeof file_part);
+  file_part = malloc(loc_file_size * sizeof file_part);
 
-  MPI_File_read_at_all(in, global_start, file_part, my_file_size, MPI_CHAR, MPI_STATUS_IGNORE);
-  file_part[my_file_size] = '\0';
+  MPI_File_read_at_all(in, global_start, file_part, loc_file_size, MPI_CHAR, MPI_STATUS_IGNORE);
+  file_part[loc_file_size] = '\0';
 
-  int loc_start = 0, loc_end = my_file_size - 1;
+  int loc_start = 0, loc_end = loc_file_size - 1;
   if (p != 0) {
       while(file_part[loc_start] != '\n') loc_start++;
       loc_start++;
@@ -125,7 +129,7 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
       while(file_part[loc_end] != '\n') loc_end++;
   }
 
-  my_file_size = loc_end - loc_start + 1;
+  loc_file_size = loc_end - loc_start + 1;
   file_part[loc_end+1] = '\n';
 
   int i = 0, c = 0, j = 0, I;
@@ -137,9 +141,7 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
 
   x = malloc(I * sizeof x);
 
-  printf("%d\n",my_file_size);
   for(int n = loc_start; n <= loc_end; ++n){
-    //if(p==1) printf("%c\n", file_part[n] );
     if (file_part[n] != '\n') {
       line[j++] = file_part[n];
 
@@ -156,7 +158,6 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
       c = 0;
       j = 0;
       x[i++] = x_line;
-      if(p==1) printf("%s\n", line);
     }
   }
 
@@ -213,11 +214,6 @@ int main(int argc, char **argv)
   x = read_parallel_csv(fp, p, P, overlap, len_x, dim_x);
 
   I = (len_x + P - p - 1) / P;
-  if (p == 1) {
-      printPartition(x, I, dim_x);
-  }
-
-
 
   /*
   sendcounts = partition(len_x, P);
@@ -234,4 +230,3 @@ int main(int argc, char **argv)
   rc = MPI_Finalize();
   return 0;
 }
-
