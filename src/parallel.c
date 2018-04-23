@@ -164,6 +164,7 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
 }
 
 
+
 int main(int argc, char **argv)
 {
   int rank, tag, rc, displs, P, p, I;
@@ -197,7 +198,8 @@ int main(int argc, char **argv)
       }
     }
   } else {
-    printf("Call program with <path> <xdim> <xlen> <K>\n");
+
+    printf("Program terminated due to improper input parameter. \nCall program with <path> <xdim> <xlen> <K>\n");
     exit(1);
   }
 
