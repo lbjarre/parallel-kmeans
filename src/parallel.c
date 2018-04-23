@@ -90,9 +90,10 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
   /*
     Reads from file in parallel.
   */
-  char *file_part;
-  int sum;
-  int loc_file_size;
+  int sum, loc_file_size, I;
+  char line[overlap];
+  char *file_part, *token;
+  double *x_line;
   double ** x;
 
   MPI_Offset file_size;
@@ -100,7 +101,7 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
   MPI_Offset global_start;
 
   MPI_File_get_size(in, &file_size);
-  loc_file_size = (file_size + P - p - 1) / P; //partition size
+  loc_file_size = (file_size + P - p - 1) / P;
 
   global_start = 0;
   for (int i = 0; i < p; i++) {
@@ -112,13 +113,18 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
     global_end += overlap;
   }
 
-  loc_file_size =  global_end - global_start + 1;
-
   file_part = malloc(loc_file_size * sizeof file_part);
 
+  /*
+  Reads loc_file_size bytes from file in, from file index global_start and
+  saves file to file_part
+  */
   MPI_File_read_at_all(in, global_start, file_part, loc_file_size, MPI_CHAR, MPI_STATUS_IGNORE);
   file_part[loc_file_size] = '\0';
 
+  /*
+    Files are trimmed such that every process receives the correct number of rows.
+  */
   int loc_start = 0, loc_end = loc_file_size - 1;
   if (p != 0) {
       while(file_part[loc_start] != '\n') loc_start++;
@@ -132,21 +138,16 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
   loc_file_size = loc_end - loc_start + 1;
   file_part[loc_end+1] = '\n';
 
-  int i = 0, c = 0, j = 0, I;
+  /* Converts str from file to float array */
   I = (len_x + P - p - 1) / P;
-  char line[overlap];
-  double *x_line;
-  char *token;
-  double dig;
-
   x = malloc(I * sizeof x);
+
+  int i = 0, c = 0, j = 0;
 
   for(int n = loc_start; n <= loc_end; ++n){
     if (file_part[n] != '\n') {
       line[j++] = file_part[n];
-
     } else {
-
       x_line = malloc(dim_x * sizeof x_line);
       token = strtok(line, ",");
 
@@ -154,13 +155,11 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
         x_line[c++] = strtod(token, NULL);
         token = strtok(NULL, ",");
       }
-      //printf("%d\n", n);
       c = 0;
       j = 0;
       x[i++] = x_line;
     }
   }
-
   return x;
 }
 
@@ -214,6 +213,10 @@ int main(int argc, char **argv)
   x = read_parallel_csv(fp, p, P, overlap, len_x, dim_x);
 
   I = (len_x + P - p - 1) / P;
+
+  if (p == 1) {
+    printPartition(x, I, dim_x);
+  }
 
   /*
   sendcounts = partition(len_x, P);
