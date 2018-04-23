@@ -209,7 +209,7 @@ int main(int argc, char **argv)
   if (p == 0) {
     printInfo(file_name, len_x, dim_x, k);
   }
-  int overlap = 200;
+  int overlap = 500;
   offset = displacements(len_x, P);
 
   MPI_File_open(MPI_COMM_WORLD, file_name, MPI_MODE_RDONLY, MPI_INFO_NULL, &fp);
