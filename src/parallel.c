@@ -91,7 +91,7 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
     Reads from file in parallel.
   */
   int sum, loc_file_size, I;
-  char line[overlap];
+  char *line;
   char *file_part, *token;
   double *x_line;
   double ** x;
@@ -141,6 +141,7 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
   /* Converts str from file to float array */
   I = (len_x + P - p - 1) / P;
   x = malloc(I * sizeof x);
+  line = malloc(overflow * sizeof line);
 
   int i = 0, c = 0, j = 0;
 
@@ -150,7 +151,6 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
     } else {
       x_line = malloc(dim_x * sizeof x_line);
       token = strtok(line, ",");
-
       while(token) {
         x_line[c++] = strtod(token, NULL);
         token = strtok(NULL, ",");
@@ -158,6 +158,8 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
       c = 0;
       j = 0;
       x[i++] = x_line;
+      free(line);
+      line = malloc(overflow * sizeof line);
     }
   }
   return x;
