@@ -2,13 +2,13 @@
 
 PARCC=mpicc
 SEQCC=gcc
-FLAGS=-O -Wall -lm
+FLAGS=-Wall -lm -std=c99
 
 PARSRC=src/parallel.c
 SEQSRC=src/sequential.c
 
-PAROUT=bin/main
-SEQOUT=bin/seqmain
+PAROUT=bin/parallel
+SEQOUT=bin/sequential
 
 parallel:
 	$(PARCC) $(PARSRC) $(FLAGS) -o $(PAROUT)
