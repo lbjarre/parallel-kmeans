@@ -86,7 +86,7 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
 
   MPI_File_get_size(in, &file_size);
   printf("%lli\n", file_size);
-  file_size--; //remove EOF.
+  //file_size--; //remove EOF.
   my_file_size = (file_size + P - p - 1) / P; //partition size
 
   global_start = 0;
@@ -204,7 +204,7 @@ int main(int argc, char **argv)
 
   I = (len_x + P - p - 1) / P;
   if (p == 1) {
-      //printPartition(x, I, dim_x);
+      printPartition(x, I, dim_x);
   }
 
 
