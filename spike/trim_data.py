@@ -1,5 +1,7 @@
+
+print("Trimming data...")
 i = 0
-with open('data/activity/Phones_accelerometer.csv') as fin, open('data/data.csv', 'w') as fout:
+with open('data/Activity recognition exp/Phones_accelerometer.csv') as fin, open('data/data.csv', 'w') as fout:
     for line in fin:
         i += 1
         l = line.split(',')[:6]
