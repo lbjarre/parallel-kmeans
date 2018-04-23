@@ -7,6 +7,7 @@
 /* Helper functions from sequential */
 #include "../include/k_means.h"
 
+
 void printInfo(char * file_name, int len_x, int dim_x, int k){
   printf("\n");
   printf("Data: %s\n",file_name);
@@ -15,6 +16,7 @@ void printInfo(char * file_name, int len_x, int dim_x, int k){
   printf("Number of clusters: %d\n", k);
   printf("Running...\n");
 }
+
 
 int * partition(int N, int P)
 {
@@ -27,6 +29,8 @@ int * partition(int N, int P)
   }
   return I;
 }
+
+
 int * displacements(int N, int P)
 {
   int s = 0;
@@ -41,6 +45,7 @@ int * displacements(int N, int P)
   return I;
 }
 
+
 void printPartition(double **x, int I, int dim_x){
   for (int i = 0; i < I; i++) {
     for (int j = 0; j < dim_x; j++) {
@@ -49,6 +54,7 @@ void printPartition(double **x, int I, int dim_x){
     printf("\n");
   }
 }
+
 
 int * initSeeds(int K, int N)
 {
@@ -59,8 +65,10 @@ int * initSeeds(int K, int N)
   }
   return seeds;
 }
-double ** assignSeeds(double **data, int *seeds, int K, int dim_x){
 
+
+double ** assignSeeds(double **data, int *seeds, int K, int dim_x)
+{
   double ** clusters;
   clusters = malloc(K * sizeof clusters);
 
@@ -72,6 +80,7 @@ double ** assignSeeds(double **data, int *seeds, int K, int dim_x){
   }
   return clusters;
 }
+
 
 double ** read_parallel_csv(MPI_File in, const int p, const int P, const int overlap, int len_x, int dim_x)
 {
@@ -154,6 +163,7 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
   return x;
 }
 
+
 int main(int argc, char **argv)
 {
   int rank, tag, rc, displs, P, p, I;
@@ -224,3 +234,4 @@ int main(int argc, char **argv)
   rc = MPI_Finalize();
   return 0;
 }
+
