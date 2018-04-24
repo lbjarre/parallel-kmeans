@@ -6,7 +6,7 @@ INTPCC=mpiicc
 
 FLAGS=-Wall -lm -std=c99
 
-PARSRC=src/parallel.c
+PARSRC=src/parallel.c src/k-means-parallel.c
 SEQSRC=src/sequential.c
 REDSRC=src/readparallel.c
 
