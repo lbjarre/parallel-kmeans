@@ -95,7 +95,7 @@ double ** char_to_double(char *local_file_partition, const int dim_x, const int 
 {
   char *token, *line;
   double *x_line, **x;
-  int c = 0, n = 0, i;
+  int c = 0, i;
 
   x = malloc(I * sizeof x);
   for (i = 0; i < I; i++) {
@@ -161,8 +161,7 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
 
 int main(int argc, char **argv)
 {
-  int tag, rc, P, p, I;
-  int *offset;
+  int rc, P, p, I;
   double **x;
 
   int dim_x = 4;
@@ -170,12 +169,10 @@ int main(int argc, char **argv)
   int k = 4;
 
   /*Initialize MPI*/
-  MPI_Status status;
-  tag = 100;
+  //tag = 100;
   rc = MPI_Init(&argc, &argv);
   rc = MPI_Comm_size(MPI_COMM_WORLD, &P);
   rc = MPI_Comm_rank(MPI_COMM_WORLD, &p);
-  MPI_Info info;
 
   char *file_name;
   MPI_File fp;
@@ -213,7 +210,7 @@ int main(int argc, char **argv)
 
 
   if (p == 1) {
-    printPartition(x, I, dim_x);
+    //printPartition(x, I, dim_x);
   }
 
   /*
