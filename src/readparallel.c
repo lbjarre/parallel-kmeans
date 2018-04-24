@@ -169,12 +169,18 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
   for (n = local_start; n < local_end; n++) {
     if (local_file_partition[n] != '\n') {
       line[j++] = local_file_partition[n];
-    }else{
+
+    }
+    else{
       x_line = malloc(dim_x * sizeof x_line);
       token = strtok(line, ",");
+      if(p==1){
+        printf("%d\n", i);
+      }
       while(token) {
         x_line[c++] = strtod(token, NULL);
         token = strtok(NULL, ",");
+
       }
       c = 0; j = 0;
       x[i++] = x_line;
@@ -182,6 +188,7 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
       line = malloc(overlap * 2 * sizeof line);
     }
   }
+  printf("%s\n","finalized" );
   return x;
 }
 
@@ -227,8 +234,9 @@ int main(int argc, char **argv)
 
   if (p == 0) {
     printInfo(file_name, len_x, dim_x, k);
+    printf("START READ FILE\n");
   }
-  int overlap = 100;
+  int overlap = 200;
   offset = displacements(len_x, P);
 
   MPI_File_open(MPI_COMM_WORLD, file_name, MPI_MODE_RDONLY, MPI_INFO_NULL, &fp);
@@ -238,7 +246,7 @@ int main(int argc, char **argv)
   I = (len_x + P - p - 1) / P;
 
   if (p == 1) {
-    printPartition(x, I, dim_x);
+    //printPartition(x, I, dim_x);
   }
 
   /*

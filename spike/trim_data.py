@@ -10,7 +10,7 @@ def format(value):
 i = 0
 print("Trimming data...")
 
-with open('data/iris.csv', 'r') as fin, open('data/iris_trim.csv', 'w') as fout:
+with open('data/Activity recognition exp/Phones_accelerometer.csv', 'r') as fin, open('data/data_trim.csv', 'w') as fout:
     for line in fin:
         i += 1
         l = line.split(',')[1:6]
