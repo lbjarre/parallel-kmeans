@@ -1,7 +1,10 @@
 import sys
 
 def format(value):
-    return "%.10f" % value
+    if value < 0:
+        return "%.9f" % value
+    else:
+        return "%.10f" % value
 
 
 i = 0
@@ -12,7 +15,7 @@ with open('data/Activity recognition exp/Phones_accelerometer.csv', 'r') as fin,
         i += 1
         l = line.split(',')[1:6]
         if (any(c.isalpha() for c in l)):
-            i -= 1 
+            i -= 1
             continue
         l = [format(float(v)) for v in l]
         fout.write(','.join(l)+'\n')
