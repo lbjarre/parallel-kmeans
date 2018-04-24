@@ -50,13 +50,18 @@ void printPartition(double **x, int I, int dim_x){
   /*
   Function for debugging
   */
-  for (int i = 0; i < I; i++) {
-    printf("%d: ",i+1);
-    for (int j = 0; j < dim_x; j++) {
-        printf("%f, ", x[i][j]);
-    }
-    printf("\n");
+  printf("%d: ",1);
+  for (int j = 0; j < dim_x; j++) {
+      printf("%f, ", x[0][j]);
   }
+  printf("\n");
+
+  printf("%d: ",I);
+  for (int j = 0; j < dim_x; j++) {
+      printf("%f, ", x[I-1][j]);
+  }
+  printf("\n");
+
 }
 
 
