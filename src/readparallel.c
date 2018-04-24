@@ -200,7 +200,6 @@ int main(int argc, char **argv)
     printf("START READ FILE\n");
   }
   int overlap = 200;
-  offset = displacements(len_x, P);
 
   MPI_File_open(MPI_COMM_WORLD, file_name, MPI_MODE_RDONLY, MPI_INFO_NULL, &fp);
 
