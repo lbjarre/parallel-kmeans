@@ -110,9 +110,8 @@ double ** char_to_double(char *local_file_partition, const int dim_x, const int 
         token = strtok(NULL, ",");
     }
     c = 0;
-    x[i++] = x_line;
+    x[i] = x_line;
     free(line);
-    free(x_line);
   }
 
   return x;
@@ -142,7 +141,11 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
   }
   x_cols++; //to account for new line
 
+  printf("COLUMNS : %d\n",x_cols );
+
   local_file_size = I * x_cols;
+
+  printf("LOCAL FILE SIZE %d\n", local_file_size);
 
   global_start = 0;
   for (i = 0; i < p; i++) {
@@ -153,6 +156,8 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
 
   MPI_File_read_at_all(in, global_start*x_cols, local_file_partition, local_file_size, MPI_CHAR, MPI_STATUS_IGNORE);
 
+  //if(p==0)printf("%s\n", local_file_partition);
+
   x = char_to_double(local_file_partition, dim_x, I, x_cols);
 
   return x;
@@ -161,7 +166,7 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
 
 int main(int argc, char **argv)
 {
-  int rc, P, p, I;
+  int rc, P, p, I, tag;
   double **x;
 
   int dim_x = 4;
@@ -169,7 +174,7 @@ int main(int argc, char **argv)
   int k = 4;
 
   /*Initialize MPI*/
-  //tag = 100;
+  tag = 100;
   rc = MPI_Init(&argc, &argv);
   rc = MPI_Comm_size(MPI_COMM_WORLD, &P);
   rc = MPI_Comm_rank(MPI_COMM_WORLD, &p);
@@ -194,7 +199,6 @@ int main(int argc, char **argv)
     exit(1);
   }
 
-
   if (p == 0) {
     printInfo(file_name, len_x, dim_x, k);
     printf("START READ FILE\n");
@@ -207,22 +211,10 @@ int main(int argc, char **argv)
 
   x = read_parallel_csv(fp, p, P, overlap, len_x, dim_x, I);
 
-
+  printf("%d\n", I);
   if (p == 1) {
-    //printPartition(x, I, dim_x);
+    printPartition(x, I, dim_x);
   }
-
-  /*
-  sendcounts = partition(len_x, P);
-  dspls = displacements(len_x, P);
-  rec_buf = malloc(sendcounts[p] * sizeof rec_buf);
-  seeds = initSeeds(k, len_x);
-  m = assignSeeds(data, seeds, k, dim_x);
-
-  //MPI_Scatterv(&data, sendcounts, dspls, MPI_CHAR, &rec_buf, tag, MPI_CHAR, 0, MPI_COMM_WORLD);
-
-  printf("Scatter complete\n");
-  */
 
   rc = MPI_Finalize();
   return 0;
