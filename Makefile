@@ -8,9 +8,12 @@ FLAGS=-Wall -lm -std=c99
 
 PARSRC=src/parallel.c
 SEQSRC=src/sequential.c
+REDSRC=src/readparallel.c
 
 PAROUT=bin/parallel
 SEQOUT=bin/sequential
+REDOUT=bin/read
+
 
 parallel:
 	$(PARCC) $(PARSRC) $(FLAGS) -o $(PAROUT)
@@ -20,4 +23,5 @@ parallel-int:
 
 sequential:
 	$(SEQCC) $(SEQSRC) $(FLAGS) -o $(SEQOUT)
-
+par-red: 
+	$(PARCC) $(REDSRC) $(FLAGS) -o $(REDOUT)
