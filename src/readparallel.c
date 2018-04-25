@@ -50,18 +50,13 @@ void printPartition(double **x, int I, int dim_x){
   /*
   Function for debugging
   */
-  printf("%d: ",1);
-  for (int j = 0; j < dim_x; j++) {
-      printf("%f, ", x[0][j]);
+   for (int i = 0; i < I; i++) {
+    printf("%d: ", i+1);
+    for (int j = 0; j < dim_x; j++) {
+        printf("%f, ", x[i][j]);
+    }
+    printf("\n");
   }
-  printf("\n");
-
-  printf("%d: ",I);
-  for (int j = 0; j < dim_x; j++) {
-      printf("%f, ", x[I-1][j]);
-  }
-  printf("\n");
-
 }
 
 
@@ -95,13 +90,16 @@ double ** char_to_double(char *local_file_partition, const int dim_x, const int 
 {
   char *token, *line;
   double *x_line, **x;
-  int c = 0, i;
+  int c = 0, i, j;
 
   x = malloc(I * sizeof x);
   for (i = 0; i < I; i++) {
+
     line = malloc(x_cols * sizeof line);
     x_line = malloc(dim_x * sizeof x_line);
-    for (int j = 0; j < x_cols; j++) {
+
+    //read in the file partition line by line
+    for (j = 0; j < x_cols-1; j++) {
       line[j] = local_file_partition[i*x_cols + j];
     }
     token = strtok(line, ",");
@@ -211,11 +209,9 @@ int main(int argc, char **argv)
 
   x = read_parallel_csv(fp, p, P, overlap, len_x, dim_x, I);
 
-  printf("%d\n", I);
-  if (p == 1) {
+  if(p==1){
     printPartition(x, I, dim_x);
   }
-
   rc = MPI_Finalize();
   return 0;
 }
