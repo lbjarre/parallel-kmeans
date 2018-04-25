@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
-
+#include "k_means.h"
 
 double ** read_csv(char *filepath, int dim_x, int len_x)
 {
@@ -118,3 +118,4 @@ double ** k_means(double **x, int dim_x, int len_x, int k)
 
     return m;
 }
+

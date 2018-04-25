@@ -1,6 +1,6 @@
-#include <stdio.h>
+#include <stdlib.h>
 #include <mpi.h>
-#include "../include/k_means.h"
+#include "k_means.h"
 #include "k-means-parallel.h"
 
 #define MAX_ITER 1000

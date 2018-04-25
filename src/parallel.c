@@ -5,7 +5,8 @@
 #include <mpi.h>
 
 /* Helper functions from sequential */
-#include "../include/k_means.h"
+#include "k_means.h"
+#include "k-means-parallel.h"
 
 
 void printInfo(char * file_name, int len_x, int dim_x, int k){
