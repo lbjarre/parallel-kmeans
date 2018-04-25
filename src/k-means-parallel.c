@@ -47,17 +47,17 @@ double ** kMeansParallel(double **x, const int k, const int dim, const int len, 
     int class;
 
     do {
-        
+
         /*
             Classify all of the locally assigned data points
             and start adding up them to calculate the next class means
         */
 
         for (int i = 0; i < len; ++i) {
-            
+
             class = nearest_mean(x[i], m, dim, k);
             k_count[class]++;
-            
+
             for (int j = 0; j < dim; ++j) {
                 m_[class][j] += x[i][j];
             }
@@ -70,7 +70,7 @@ double ** kMeansParallel(double **x, const int k, const int dim, const int len, 
 
         for (int i = 0; i < k; ++i) {
 
-            for (int j = 0; i < dim; ++j) {
+            for (int j = 0; j < dim; ++j) {
                 MPI_Allreduce(&m_[i][j], &m_[i][j], 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
             }
 
@@ -83,13 +83,13 @@ double ** kMeansParallel(double **x, const int k, const int dim, const int len, 
         */
 
         for (int i = 0; i < k; ++i) {
-            
+
             for (int j = 0; j < dim; ++j) {
                 m_[i][j] /= (k_count[i] == 0) ? 1 : k_count[i];
             }
-            
+
             k_count[i] = 0;
-        
+
         }
 
         /*
@@ -98,11 +98,11 @@ double ** kMeansParallel(double **x, const int k, const int dim, const int len, 
         */
 
         not_converged = 0;
-        
+
         for (int i = 0; i < k; ++i) {
-            
+
             for (int j = 0; j < dim; ++j) {
-                
+
                 if (m[i][j] != m_[i][j]) not_converged = 1;
                 m[i][j]  = m_[i][j];
                 m_[i][j] = 0;
@@ -116,4 +116,3 @@ double ** kMeansParallel(double **x, const int k, const int dim, const int len, 
     return m;
 
 }
-

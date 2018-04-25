@@ -6,7 +6,7 @@ INTPCC=mpiicc
 
 FLAGS=-Wall -lm -std=c99
 
-PARSRC=src/parallel.c src/k-means-parallel.c src/k_means.c
+PARSRC=src/parallel.c src/k-means-parallel.c src/k_means.c src/read-parallel.c
 SEQSRC=src/sequential.c src/k_means.c
 REDSRC=src/readparallel.c
 
@@ -24,5 +24,5 @@ parallel-int:
 sequential:
 	$(SEQCC) $(SEQSRC) $(FLAGS) -o $(SEQOUT)
 
-par-red: 
+par-red:
 	$(PARCC) $(REDSRC) $(FLAGS) -o $(REDOUT)
