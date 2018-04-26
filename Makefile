@@ -15,6 +15,11 @@ SEQOUT=bin/sequential
 REDOUT=bin/read
 
 
+LATEXC=pdflatex
+LATEXFLAGS=-output-directory doc/logs -halt-on-error
+LATEXSRC=doc/src/report.tex
+LATEXMVOUTPUT=mv doc/logs/report.pdf doc/
+
 parallel:
 	$(PARCC) $(PARSRC) $(FLAGS) -o $(PAROUT)
 
@@ -26,3 +31,7 @@ sequential:
 
 par-red:
 	$(PARCC) $(REDSRC) $(FLAGS) -o $(REDOUT)
+
+report:
+	$(LATEXC) $(LATEXFLAGS) $(LATEXSRC)
+	$(LATEXMVOUTPUT)
