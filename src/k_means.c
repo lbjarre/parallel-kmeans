@@ -15,7 +15,7 @@ double ** read_csv(char *filepath, int dim_x, int len_x)
 
     x = malloc(len_x * sizeof x);
 
-    while (fgets(line, MAX_LEN, fp)) {
+    while (fgets(line, MAX_LEN, fp) && i < len_x) {
         x_line = malloc(dim_x * sizeof x_line);
         token = strtok(line, ",");
         while (token) {

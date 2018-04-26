@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <mpi.h>
 #include "k_means.h"
 #include "k-means-parallel.h"

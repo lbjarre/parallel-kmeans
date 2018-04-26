@@ -83,8 +83,18 @@ int main(int argc, char **argv)
 
   x = read_parallel_csv(fp, p, P, overlap, len_x, dim_x, I);
 
+  /*
   if (p == 1) {
     printPartition(x, I, dim_x);
+  }
+  */
+
+  double **m = kMeansParallel(x, k, dim_x, I, p);
+
+  for (int i = 0; i < k; ++i) {
+    for (int j = 0; j < dim_x; ++j) {
+      printf("p: %d, k: %d, k[%d]: %f\n", p, i, j, m[i][j]);
+    }
   }
 
   /*
