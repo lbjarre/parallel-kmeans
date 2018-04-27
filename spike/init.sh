@@ -1,5 +1,5 @@
 #  download and unzip data
-mkdir data -p
+mkdir -p data
 python3 spike/dl_data.py
 
 #  format data

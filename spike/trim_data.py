@@ -1,6 +1,17 @@
 import sys
+import numpy as np
+
+def factorial_count(x, n=0):
+    a = x/(10**n)
+    # print(a)
+    if (np.abs(a) < 10):
+        return n
+    else:
+        return factorial_count(x, n+1)
+
 
 def format(value):
+    value = value/(10**factorial_count(value))
     if value < 0:
         return "%.9f" % value
     else:
