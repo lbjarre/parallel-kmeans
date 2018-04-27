@@ -21,7 +21,7 @@ by minimization of the summed squared distance of all class points to the class 
   \mathcal{S}_{k\text{-means}}
   = \argmin_\mathcal{S} \sum_{i=1}^k \sum_{\bm{x} \in S_i} ||\bm{x} - \bm{\mu}_i||^2
 \]
-A common algorithm to find this is Lloyd's algorithm,
+A common algorithm to find this is Lloyd's algorithm \cite{lloyd},
 which iteratively classifies points according to current class means
 and updates them with the average of all classified points until convergence.
 \Cref{alg:lloyds} describes this procedure in pseudocode.
