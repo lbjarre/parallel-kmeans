@@ -1,13 +1,11 @@
 import sys
 import numpy as np
 
-def factorial_count(x, n=0):
-    a = x/(10**n)
-    # print(a)
-    if (np.abs(a) < 10):
-        return n
-    else:
-        return factorial_count(x, n+1)
+def factorial_count(x):
+    n = 0
+    while(np.abs(x)/(10**n) >= 10):
+        n += 1
+    return n
 
 
 def format(value):
