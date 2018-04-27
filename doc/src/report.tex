@@ -1,0 +1,40 @@
+\documentclass{article}
+
+\input{doc/src/preamble.tex}
+
+\begin{document}
+
+\begin{center}
+  \textbf{
+    \LARGE Parallel $k$-means Clustering \\
+    \large SF2568 -- Parallel Computations for Large-Scale Problems \\
+           \vspace{0.5em}
+    \large \begin{tabular}{cc}
+             Lukas Bjarre          & Gabriel Carrizo       \\
+             \mail{lbjarre@kth.se} & \mail{carrizo@kth.se}
+           \end{tabular} \\
+  }
+  \vspace{0.5em}
+  \rule{\textwidth}{0.4pt}
+\end{center}
+
+\begin{abstract}
+This report details the implementation and analysis of a parallelisation of the $k$-means clustering method.
+A serial version of Lloyd's algorithm for computing the $k$-means clustering was analysed
+and a parallelisation stategy of dividing data points over multiple processes was proposed.
+The parallel implementation was a single program multiple data scheme on distributed memory
+using the Message Passing Interface (MPI) standard.
+The implementation was tested on the super computer cluster Tegner
+located at the PDC Center for High Performance Computing at the Royal Institute of Technology in Stockholm.
+<something about the results>.
+\end{abstract}
+
+\section{Introduction}
+\input{doc/src/introduction.tex}
+
+\section{Theory}
+\input{doc/src/theory.tex}
+
+\bibliography{doc/src/ref.bib}
+
+\end{document}
