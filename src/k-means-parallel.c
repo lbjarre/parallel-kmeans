@@ -72,10 +72,10 @@ double ** kMeansParallel(double **x, const int k, const int dim, const int len, 
         for (int i = 0; i < k; ++i) {
 
             for (int j = 0; j < dim; ++j) {
-                MPI_Allreduce(&m_[i][j], &m_[i][j], 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+                MPI_Allreduce(MPI_IN_PLACE, &m_[i][j], 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
             }
 
-            MPI_Allreduce(&k_count[i], &k_count[i], 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+            MPI_Allreduce(MPI_IN_PLACE, &k_count[i], 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
 
         }
 
