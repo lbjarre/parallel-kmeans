@@ -1,3 +1,14 @@
 %% Introduction section
 
-We have done parallelisation woop wooop
+\subsection{Clustering}
+
+Clustering is described in \cite{hartigan_intro} as the grouping of similar objects. Hartigan explains that two objects are similar if their separate observations could be of the same object. Using the eample of planets, Hartingan explains that two observed objects are planets if their observations are similar enough in significant features. Consider for example the features: shape and light intensity, versus color to discern planets from stars.
+
+\subsection{Parallel Computations}
+Today, clustering is an important tool for automatic grouping or preprocessing of data in data science. With the emergence of \emph{big data} where the number of data points and dimensions of the data are very large these algorithms can be computationally costly. Traditionally these algorithms are written in a linear manner, where \textit{instruction A} is followed by \textit{instruction B}, even if they operate on disjoint data. Modern processors with multiple cores have the capability of executing multiple instructions, or processes, at the same time. This enables some problems to be computed more efficiently, however one prerequisite is the possibility of dividing the problem into disjoint subsets that can be processed individually. This class of problem falls into the parallel category whilst the opposite is classed as a sequential problem. A sequential problem is one in which each section of the code is dependent on the previous sections output in order to proceed with the computations. Many problems are partly parallel and sequential and can be subdivided into both categories. Parallel computations are more complex than sequential and are usually preserved for problems where the computation time is important or where the computation time can be reduced substantially.
+
+Parallel algorithms can be divided into two sub classes: shared vs. distributed memory. Distributed memory implementations require communication between processes where data and results of computations are exchanged or gathered. Although these transactions take relatively long time to perform, distributed implementations are prefered as shared memory implementations suffer from problematic \emph{race conditions}.
+
+
+\subsection{Aim}
+This project proposes a distributed parallel implementation of a clustering algorithm to reduce the computation time for more efficient processing of data. The project aims to reduce the computation time of a modern interpretation of a fairly simple clustering algorithm \emph{K-means clustering} as a potential stepping stone to more complex algorithms.

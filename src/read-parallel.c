@@ -58,11 +58,7 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
   }
   x_cols++; //to account for new line
 
-  printf("COLUMNS : %d\n",x_cols );
-
   local_file_size = I * x_cols;
-
-  printf("LOCAL FILE SIZE %d\n", local_file_size);
 
   global_start = 0;
   for (i = 0; i < p; i++) {
@@ -72,8 +68,6 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
   local_file_partition = malloc(local_file_size * sizeof local_file_partition);
 
   MPI_File_read_at_all(in, global_start*x_cols, local_file_partition, local_file_size, MPI_CHAR, MPI_STATUS_IGNORE);
-
-  //if(p==0)printf("%s\n", local_file_partition);
 
   x = char_to_double(local_file_partition, dim_x, I, x_cols);
 

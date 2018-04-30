@@ -8,7 +8,7 @@ FLAGS=-Wall -lm -std=c99
 
 PARSRC=src/parallel.c src/k-means-parallel.c src/k_means.c src/read-parallel.c
 SEQSRC=src/sequential.c src/k_means.c
-REDSRC=src/readparallel.c
+REDSRC=src/read-parallel.c
 
 PAROUT=bin/parallel
 SEQOUT=bin/sequential
