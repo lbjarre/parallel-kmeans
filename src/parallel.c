@@ -96,18 +96,11 @@ int main(int argc, char **argv)
       printf("p: %d, k: %d, k[%d]: %f\n", p, i, j, m[i][j]);
     }
   }
-
-  /*
-  sendcounts = partition(len_x, P);
-  dspls = displacements(len_x, P);
-  rec_buf = malloc(sendcounts[p] * sizeof rec_buf);
-  seeds = initSeeds(k, len_x);
-  m = assignSeeds(data, seeds, k, dim_x);
-
-  //MPI_Scatterv(&data, sendcounts, dspls, MPI_CHAR, &rec_buf, tag, MPI_CHAR, 0, MPI_COMM_WORLD);
-
-  printf("Scatter complete\n");
-  */
+  int* closest_means;
+  closest_means = assign_nearest_cluster(x, m, k, dim_x, I);
+  const char* fname = "out.dat";
+  printf("%d\n",I);
+  parallel_print_to_file(fname, closest_means, m, I, dim_x, k, p, P);
 
   rc = MPI_Finalize();
   return 0;
