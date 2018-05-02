@@ -5,7 +5,7 @@
 #include <mpi.h>
 
 
-double ** char_to_double(char *local_file_partition, const int dim_x, const int I, const int x_cols)
+double ** char_to_double_array(char *local_file_partition, const int dim_x, const int I, const int x_cols)
 {
   char *token, *line;
   double *x_line, **x;
@@ -35,7 +35,7 @@ double ** char_to_double(char *local_file_partition, const int dim_x, const int 
 }
 
 
-double ** read_parallel_csv(MPI_File in, const int p, const int P, const int overlap, int len_x, int dim_x, const int I)
+double ** read_parallel_csv(MPI_File in, const int p, const int P, const int overlap, const int len_x, const int dim_x, const int I)
 {
   /*
     Reads from file in parallel.
@@ -69,7 +69,7 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
 
   MPI_File_read_at_all(in, global_start*x_cols, local_file_partition, local_file_size, MPI_CHAR, MPI_STATUS_IGNORE);
 
-  x = char_to_double(local_file_partition, dim_x, I, x_cols);
+  x = char_to_double_array(local_file_partition, dim_x, I, x_cols);
 
   return x;
 }

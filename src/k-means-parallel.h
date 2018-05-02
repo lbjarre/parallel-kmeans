@@ -1,6 +1,6 @@
 #ifndef _KMEANSPAR
 #define _KMEANSPAR
 
-double ** kMeansParallel(double**, const int, const int, const int, const int);
+double ** k_means_parallel(double**, const int, const int, const int, const int);
 
 #endif

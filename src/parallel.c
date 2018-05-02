@@ -10,7 +10,7 @@
 #include "read-parallel.h"
 
 
-void printInfo(char * file_name, int len_x, int dim_x, int k){
+void print_info(char * file_name, int len_x, int dim_x, int k){
   printf("\n");
   printf("Data: %s\n",file_name);
   printf("Number of points: %d\n", len_x);
@@ -20,7 +20,7 @@ void printInfo(char * file_name, int len_x, int dim_x, int k){
 }
 
 
-void printPartition(double **x, int I, int dim_x){
+void print_partition(double **x, int I, int dim_x){
   /*
   Function for debugging
   */
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 
 
   if (p == 0) {
-    printInfo(file_name, len_x, dim_x, k);
+    print_info(file_name, len_x, dim_x, k);
   }
   int overlap = 200;
 
@@ -85,11 +85,11 @@ int main(int argc, char **argv)
 
   /*
   if (p == 1) {
-    printPartition(x, I, dim_x);
+    print_partition(x, I, dim_x);
   }
   */
 
-  double **m = kMeansParallel(x, k, dim_x, I, p);
+  double **m = k_means_parallel(x, k, dim_x, I, p);
 
   for (int i = 0; i < k; ++i) {
     for (int j = 0; j < dim_x; ++j) {

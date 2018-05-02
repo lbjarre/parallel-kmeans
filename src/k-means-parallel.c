@@ -6,7 +6,7 @@
 
 #define MAX_ITER 1000
 
-double ** kMeansParallel(double **x, const int k, const int dim, const int len, const int p)
+double ** k_means_parallel(double **x, const int k, const int dim, const int len, const int p)
 {
     double **m, **m_;
     int k_count[k];

@@ -4,7 +4,7 @@
 #include <string.h>
 #include "k_means.h"
 
-double ** read_csv(char *filepath, int dim_x, int len_x)
+double ** read_csv(char *filepath, const int dim_x, const int len_x)
 {
     const int MAX_LEN = 128;
     FILE *fp = fopen(filepath, "r");
@@ -30,7 +30,7 @@ double ** read_csv(char *filepath, int dim_x, int len_x)
 }
 
 
-double dist_sq(double *x, double *y, int len)
+double dist_sq(double *x, double *y, const int len)
 {
     double sum = 0;
     for (int i = 0; i < len; ++i) {
@@ -40,7 +40,7 @@ double dist_sq(double *x, double *y, int len)
 }
 
 
-int nearest_mean(double *x, double **means, int dim_x, int k)
+int nearest_mean(double *x, double **means, const int dim_x, const int k)
 {
     double dist;
     double min = INFINITY;
@@ -57,7 +57,7 @@ int nearest_mean(double *x, double **means, int dim_x, int k)
 }
 
 
-double ** k_means(double **x, int dim_x, int len_x, int k)
+double ** k_means(double **x, const int dim_x, const int len_x, const int k)
 {
     double **m, **m_next;
     int k_count[k];
@@ -119,3 +119,20 @@ double ** k_means(double **x, int dim_x, int len_x, int k)
     return m;
 }
 
+
+int * assign_nearest_cluster(double **x, double **m, const int k, const int dim, const int len)
+{
+  int i = 0;
+  int *o;
+
+  /*
+  Loop through the points to assign the nearest cluster.
+  Returns a list of each points nearest cluster.
+  */
+  o = malloc(len * sizeof o);
+  for (i = 0; i < len; i++) {
+    o[i] = nearest_mean(x[i], m, dim, k);
+  }
+
+  return o;
+}
