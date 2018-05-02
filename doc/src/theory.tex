@@ -1,15 +1,16 @@
 %% Theory section
 
 \subsection{$k$-means clustering}
+
 $k$-means clustering is a data clustering method
 which clusters input data from the data set $\mathcal{X}$ into $k$ different classes.
-The classes are represented by the class means $\mu_i$ and points are considered to be in a class $S_i$
+The classes are represented by the class means $\bm{\mu}_i$ and points are considered to be in a class $S_i$
 if the squared distance to the class mean is the minimum
 compared to the squared distance to the other class means.
 Formally:
 \[
       S_i = \{ \bm{x} \in \mathcal{X}
-   :  ||\bm{x} - \bm{\mu}_i||^2 \leq ||\bm{x} - \bm{\mu}_j||^2
+   :  \|\bm{x} - \bm{\mu}_i\|^2 \leq \|\bm{x} - \bm{\mu}_j\|^2
   ,\, \forall 1 \leq j \leq k \}
 \]
 A clustering method aims to find a selection of these classes
@@ -19,12 +20,17 @@ $k$-means finds the placement of the class means
 by minimization of the summed squared distance of all class points to the class mean for all $k$ classes:
 \[
   \mathcal{S}_{k\text{-means}}
-  = \argmin_\mathcal{S} \sum_{i=1}^k \sum_{\bm{x} \in S_i} ||\bm{x} - \bm{\mu}_i||^2
+  = \argmin_\mathcal{S} \sum_{i=1}^k \sum_{\bm{x} \in S_i} \|\bm{x} - \bm{\mu}_i\|^2
 \]
 A common algorithm to find this is Lloyd's algorithm \cite{lloyd},
 which iteratively classifies points according to current class means
 and updates them with the average of all classified points until convergence.
 \Cref{alg:lloyds} describes this procedure in pseudocode.
+This algorithm requires multiple loops for each iteration.
+The most costly part is the classification of all data points,
+which requires computation on all $d$ dimensions of the data set
+for all $k$ classes over all $n$ points,
+giving each iteration a complexity of $O(nkd)$.
 
 \begin{algorithm}[!ht]
 
@@ -36,7 +42,7 @@ and updates them with the average of all classified points until convergence.
   \KwIn{Data points $\mathcal{X} = \{\bm{x}_1, \bm{x}_2, \ldots, \bm{x}_n\}$
         with $\bm{x}_i \in \mathbb{R}^d \; \forall \bm{x}_i \in \mathcal{X}$,
         number of clusters $k$}
-  \KwOut{Class means $\bm{\mu}_1,\bm{\mu}_2,\ldots,\bm{\mu}_k$}
+  \KwOut{Class means $\bm{\mu}_1, \bm{\mu}_2, \ldots, \bm{\mu}_k$}
   \BlankLine
 
   \Init{} $\bar{\bm{\mu}}_i$ on random points in $\mathcal{X} \; \forall i = 1, \ldots, k$ \;
@@ -51,7 +57,7 @@ and updates them with the average of all classified points until convergence.
 
     \ForAll{$\bm{x} \in \mathcal{X}$}{
 
-      $\cls \gets \argmin_k ||\bm{x} - \bm{\mu}_k||^2$ \;
+      $\cls \gets \argmin_k \|\bm{x} - \bm{\mu}_k\|^2$ \;
       $\cnt_\cls \gets \cnt_\cls + 1$ \;
       $\bar{\bm{\mu}}_\cls \gets \bar{\bm{\mu}}_\cls + \bm{x}$ \;
     
@@ -71,8 +77,29 @@ and updates them with the average of all classified points until convergence.
 
 \end{algorithm}
 
-Lloyd's algorithm requires multiple loops for each iteration.
-The most costly part is the classification of all data points,
-which requires computation on all $d$ dimensions of the data set
-for all $k$ classes over all $n$ points,
-giving the algorithm a $\Theta(nkd)$ complexity.
+\subsection{Parallelisation strategy}
+
+\newcommand{\Titer}{T_{\text{iter}}}
+\newcommand{\tcalc}{t_{\text{calc}}}
+\newcommand{\tcomm}{t_{\text{comm}}}
+
+\Cref{alg:lloyds} shows a lot of possibility of parallelisation
+due to the large number of independent calculations.
+For every iteration all the points needs to be reclassified to the new means,
+for which every point is independent of the other points.
+Computing the new class means consist of adding up the classified points over all $d$ dimensions
+as well as the total count,
+which are additions that can be done firstly on separate processors and finally reduced over all processors.
+
+Overall we get a execution time for each iteration $\Titer$ that with the number of processes $P$
+that roughly scales as
+\[
+  \Titer = \tcalc\frac{nkd}{P} + \tcomm k(d + 1)\log P
+\]
+Noteworthy for the analysis of this performance is that $n$ will be much larger than $k$ and $d$
+in most applications.
+$k$ and $d$ normally lie in the $10^1$-$10^2$ range,
+while $n$ can go up to $10^6$-$10^9$ easily.
+The reduction of the calculation time will therefore affect the overall computation time
+more than the increasing communication time.
+
