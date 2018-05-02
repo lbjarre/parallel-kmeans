@@ -73,3 +73,49 @@ double ** read_parallel_csv(MPI_File in, const int p, const int P, const int ove
 
   return x;
 }
+
+
+int parallel_print_to_file(const char * filename, int *x, double **m, const int len, const int dim, const int k, const int p, const int P){
+  int i = 0, j = 0;
+  double a = 0;
+  int tag = 100;
+
+  FILE *f;
+  if (p == 0) {
+    f = fopen(filename, "w");
+    fprintf(f, "%d,%d\n", k,dim);
+    for (i=0; i < k; i++) {
+      for (j = 0; j < dim; j++) {
+        fprintf(f, "%f", m[i][j]);
+        if (j < dim-1 ) {
+          fprintf(f, ",");
+        } else {
+          fprintf(f, "\n");
+        }
+      }
+    }
+
+    for (i=0; i < len; i++) {
+        fprintf(f, "%d\n", x[i]);
+    }
+    fclose(f);
+
+    MPI_Send(&a, 1, MPI_DOUBLE, p+1, tag, MPI_COMM_WORLD);
+
+  }else{
+
+    MPI_Recv(&a, 1, MPI_DOUBLE, p-1, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+    f = fopen(filename, "a");
+
+    for (i=0; i < len; i++) {
+        fprintf(f, "%d\n", x[i]);
+    }
+    fclose(f);
+    if (p != P-1) {
+      MPI_Send(&a, 1, MPI_DOUBLE, p+1, tag, MPI_COMM_WORLD);
+    }
+  }
+
+  return 1;
+}
