@@ -1,17 +1,23 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include <mpi.h>
 #include "k_means.h"
 #include "k-means-parallel.h"
 
 #define MAX_ITER 1000
 
-double ** k_means_parallel(double **x, const int k, const int dim, const int len, const int p)
+#define min(x, y) ( (x < y) ? x : y )
+#define max(x, y) ( (x > y) ? x : y )
+
+double ** k_means_parallel(double **x, const int k, const int dim, const int len, const int p, const int P)
 {
     double **m, **m_;
     int k_count[k];
     int iter = 0;
     int not_converged = 1;
+
+    printf("es time to do shiet");
 
     /*
         Initialization and allocation of the class means
@@ -30,20 +36,27 @@ double ** k_means_parallel(double **x, const int k, const int dim, const int len
         and communicates this to the rest of the processors
     */
 
-    if (p < k) {
+    int L = (int) floor(k / P);
+    int R = (int) k % P;
+    int I = (int) (p + 1) * L + min(p + 1, R);
+
+    for (int i = p * L + min(p, R); i < I; ++i) {
         int index = rand() / (RAND_MAX / len);
-        for (int i = 0; i < dim; ++i) {
-            m[p][i] = x[index][i];
+        for (int j = 0; j < dim; ++j) {
+            m[i][j] = x[index][j];
         }
     }
 
     for (int i = 0; i < k; ++i) {
-        MPI_Bcast(m[i], dim, MPI_DOUBLE, i, MPI_COMM_WORLD);
+        int r = max( floor(i / (L + 1)), floor((i - R) / L) );
+        MPI_Bcast(m[i], dim, MPI_DOUBLE, r, MPI_COMM_WORLD);
     }
 
     /*
         Main procedure loop
     */
+
+    printf("whattup");
 
     int class;
 

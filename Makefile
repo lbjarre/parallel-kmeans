@@ -4,7 +4,7 @@ PARCC=mpicc
 SEQCC=gcc
 INTPCC=mpiicc
 
-FLAGS=-Wall -lm -std=c99
+FLAGS=-g -O2 -Wall -lm -std=c99
 
 PARSRC=src/parallel.c src/k-means-parallel.c src/k_means.c src/read-parallel.c
 SEQSRC=src/sequential.c src/k_means.c

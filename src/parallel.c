@@ -81,6 +81,8 @@ int main(int argc, char **argv)
 
   I = (len_x + P - p - 1) / P;
 
+  printf("es before reading now\n");
+
   x = read_parallel_csv(fp, p, P, overlap, len_x, dim_x, I);
 
   /*
@@ -89,7 +91,7 @@ int main(int argc, char **argv)
   }
   */
 
-  double **m = k_means_parallel(x, k, dim_x, I, p);
+  double **m = k_means_parallel(x, k, dim_x, I, p, P);
 
   for (int i = 0; i < k; ++i) {
     for (int j = 0; j < dim_x; ++j) {
@@ -104,4 +106,5 @@ int main(int argc, char **argv)
 
   rc = MPI_Finalize();
   return 0;
+
 }
