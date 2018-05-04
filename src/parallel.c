@@ -106,13 +106,14 @@ int main(int argc, char **argv)
       printf("p: %d, k: %d, k[%d]: %f\n", p, i, j, m[i][j]);
     }
   }
-  */
+
   int* closest_means;
   closest_means = assign_nearest_cluster(x, m, k, dim_x, I);
 
   const char* fname = "out.dat";
   printf("%d\n",I);
-  parallel_print_to_file(fname, closest_means, m, I, dim_x, k, p, P);
+  //parallel_print_to_file(fname, closest_means, m, I, dim_x, k, p, P);
+  */
 
   rc = MPI_Finalize();
   return 0;

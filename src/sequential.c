@@ -50,12 +50,14 @@ int main(int argc, char **argv)
     m = k_means(x, dim_x, len_x, k);
     time_after_calc = time(NULL);
 
+    /*
     for (int i = 0; i < k; i++) {
         printf("Class %d\n", i);
         for (int j = 0; j < dim_x; ++j) {
             printf("%f\n", m[i][j]);
         }
     }
+    */
 
     printf("Time for read file: %ld seconds \n", time_after_read-start_time);
     printf("Time for calc k-means: %ld seconds \n", time_after_calc - time_after_read);
