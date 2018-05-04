@@ -11,12 +11,13 @@
 #include "read-parallel.h"
 
 
-void print_info(char * file_name, int len_x, int dim_x, int k){
+void print_info(char * file_name, int len_x, int dim_x, int k, int p){
   printf("\n");
   printf("Data: %s\n",file_name);
   printf("Number of points: %d\n", len_x);
   printf("Number of dimensions: %d\n", dim_x);
   printf("Number of clusters: %d\n", k);
+  printf("Number of processes: %d\n", p);
   printf("Running parallel...\n");
 }
 
@@ -78,7 +79,7 @@ int main(int argc, char **argv)
 
 
   if (p == 0) {
-    print_info(file_name, len_x, dim_x, k);
+    print_info(file_name, len_x, dim_x, k, P);
   }
   int overlap = 200;
 
