@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     printf("Number of points: %d\n", len_x);
     printf("Number of dimensions: %d\n", dim_x);
     printf("Number of clusters: %d\n", k);
-    printf("Running...\n");
+    printf("Running sequential...\n");
 
     srand(1);
 

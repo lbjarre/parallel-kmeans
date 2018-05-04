@@ -17,7 +17,7 @@ void print_info(char * file_name, int len_x, int dim_x, int k){
   printf("Number of points: %d\n", len_x);
   printf("Number of dimensions: %d\n", dim_x);
   printf("Number of clusters: %d\n", k);
-  printf("Running...\n");
+  printf("Running parallel...\n");
 }
 
 
