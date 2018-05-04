@@ -47,6 +47,7 @@ double ** k_means_parallel(double **x, const int k, const int dim, const int len
         }
     }
 
+    printf("es before bcast\n");
     for (int i = 0; i < k; ++i) {
         int r = max( floor(i / (L + 1)), floor((i - R) / L) );
         MPI_Bcast(m[i], dim, MPI_DOUBLE, r, MPI_COMM_WORLD);
@@ -56,7 +57,7 @@ double ** k_means_parallel(double **x, const int k, const int dim, const int len
         Main procedure loop
     */
 
-    printf("whattup");
+    printf("whattup\n");
 
     int class;
 
