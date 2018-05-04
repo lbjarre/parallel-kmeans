@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include <time.h>
 
 #include "k_means.h"
 
@@ -13,6 +14,10 @@ int main(int argc, char **argv)
     int k = 4;
     double **x, **m;
     char *file_name;
+    time_t start_time;
+    time_t time_after_read;
+    time_t time_after_calc;
+
 
     if (argc >= 2){
     file_name = argv[1];
@@ -39,9 +44,11 @@ int main(int argc, char **argv)
 
     srand(1);
 
+    start_time = time(NULL);
     x = read_csv(file_name, dim_x, len_x);
-
+    time_after_read = time(NULL);
     m = k_means(x, dim_x, len_x, k);
+    time_after_calc = time(NULL);
 
     for (int i = 0; i < k; i++) {
         printf("Class %d\n", i);
@@ -49,6 +56,9 @@ int main(int argc, char **argv)
             printf("%f\n", m[i][j]);
         }
     }
+
+    printf("Time for read file: %ld seconds \n", time_after_read-start_time);
+    printf("Time for calc k-means: %ld seconds \n", time_after_calc - time_after_read);
 
     return 0;
 }

@@ -3,6 +3,7 @@
 #include <math.h>
 #include <string.h>
 #include <mpi.h>
+#include <time.h>
 
 /* Helper functions from sequential */
 #include "k_means.h"
@@ -41,6 +42,10 @@ int main(int argc, char **argv)
   int dim_x = 4;
   int len_x = 92;
   int k = 4;
+
+  time_t start_time;
+  time_t time_after_read;
+  time_t time_after_calc;
 
   /*Initialize MPI*/
 
@@ -83,23 +88,28 @@ int main(int argc, char **argv)
 
   printf("es before reading now\n");
 
+  if (p==0) {start_time = time(NULL);}
   x = read_parallel_csv(fp, p, P, overlap, len_x, dim_x, I);
 
-  /*
-  if (p == 1) {
-    print_partition(x, I, dim_x);
-  }
-  */
-
+  if (p==0) {time_after_read = time(NULL);}
   double **m = k_means_parallel(x, k, dim_x, I, p, P);
 
+  if (p==0) {
+    time_after_calc = time(NULL);
+    printf("Time for read file: %ld seconds \n", time_after_read-start_time);
+    printf("Time for calc k-means: %ld seconds \n", time_after_calc - time_after_read);
+  }
+
+  /*
   for (int i = 0; i < k; ++i) {
     for (int j = 0; j < dim_x; ++j) {
       printf("p: %d, k: %d, k[%d]: %f\n", p, i, j, m[i][j]);
     }
   }
+  */
   int* closest_means;
   closest_means = assign_nearest_cluster(x, m, k, dim_x, I);
+
   const char* fname = "out.dat";
   printf("%d\n",I);
   parallel_print_to_file(fname, closest_means, m, I, dim_x, k, p, P);
