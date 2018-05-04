@@ -17,7 +17,7 @@ double ** k_means_parallel(double **x, const int k, const int dim, const int len
     int iter = 0;
     int not_converged = 1;
 
-    printf("es time to do shiet");
+    printf("es time to do shiet\n");
 
     /*
         Initialization and allocation of the class means
