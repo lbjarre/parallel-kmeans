@@ -12,7 +12,7 @@ This project settled on a 72-megapixel image which can be seen in \cref{fig:imag
 
 \subsection{Reading data}
 
-Runs of early versions of the code indicated that reading the file sequentially and scattering the data to the processes took too long. A solution for reading the data in parallel was developed so the sequential read time would not become a bottleneck for the code. For this, MPI IO's function MPI\_File\_read\_at\_all() was utilized. However, since the function reads bytes in a document rather than rows, the data was pre-formatted such that all indides of a column were the same length. Each process then reads the first row to count how many characters are in a line. This allows calculating how many characters the different processes should read, $n_{p}$, by performing the following calculations:
+Runs of early versions of the code indicated that reading the file sequentially and scattering the data to the processes took too long. A solution for reading the data in parallel was developed so the sequential read time would not become a bottleneck for the code. For this, MPI IO's function MPI\_File\_read\_at\_all()\footnote{\url{Documentation - https://www.open-mpi.org/doc/v2.0/man3/MPI_File_read_at_all.3.php}} was utilized. However, since the function reads bytes in a document rather than rows, the data was pre-formatted such that all indides of a column were the same length. Each process then reads the first row to count how many characters are in a line. This allows calculating how many characters the different processes should read, $n_{p}$, by performing the following calculations:
 \begin{equation}
     n_{p} =  \frac{N + P - p - 1}{P} l
 \end{equation}
