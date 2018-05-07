@@ -34,6 +34,8 @@ for increasing ammount of processes.
 The image seen in \cref{fig:imagecompr} was used as the input for all of the plotted times with $k$ set to 10.
 For $p = 1$ the serial version of Lloyd's algorithm, \cref{alg:lloyds}, was used,
 while for all $p > 1$ the parallel version, \cref{alg:parlloyds}, were used.
+4-5 runs where used for each process setup and used to create a statistical mean and standard deviation,
+which are plotted as the area in the figure.
 We can see that the computation time decreases in a exponential fashion as expected.
 
 \begin{figure}[!ht]
@@ -46,10 +48,22 @@ We can see that the computation time decreases in a exponential fashion as expec
         xmax=22,
         ylabel={t [s]},
         xlabel={p}]
-        \addplot table [x=p, y expr=\thisrowno{1} + \thisrowno{2}, col sep=comma] {data/results.csv};
+        \addplot+[
+          color=blue
+        ] table [x=p, y=tt, col sep=comma] {data/results_means.csv};
+        \addplot+[
+          color=blue,
+          name path=hi
+        ] table [x index=0, y expr=\thisrowno{3} + \thisrowno{6}, col sep=comma] {data/results_means_var.csv};
+        \addplot+[
+          color=blue,
+          name path=lo
+        ] table [x index=0, y expr=\thisrowno{3} - \thisrowno{6}, col sep=comma] {data/results_means_var.csv};
+        \addplot+[color=blue, opacity=0.5] fill between [of=hi and lo];
       \end{axis}
     \end{tikzpicture}
     \caption{Total execution time}
+    \label{fig:meanvar}
   \end{subfigure}
   ~
   \begin{subfigure}[t]{0.5\textwidth}
@@ -60,7 +74,16 @@ We can see that the computation time decreases in a exponential fashion as expec
           xmax=22,
           ylabel={t [s]},
           xlabel={p}]
-          \addplot table [x=p, y=tc, col sep=comma] {data/results.csv};
+          \addplot+[color=blue] table [x=p, y=tc, col sep=comma] {data/results_means.csv};
+        \addplot+[
+          color=blue,
+          name path=hi
+        ] table [x index=0, y expr=\thisrowno{2} + \thisrowno{5}, col sep=comma] {data/results_means_var.csv};
+        \addplot+[
+          color=blue,
+          name path=lo
+        ] table [x index=0, y expr=\thisrowno{2} - \thisrowno{5}, col sep=comma] {data/results_means_var.csv};
+        \addplot+[color=blue, opacity=0.5] fill between [of=hi and lo];
         \end{axis}
       \end{tikzpicture}
     \caption{Execution time for $k$-means parallel}
@@ -74,7 +97,16 @@ We can see that the computation time decreases in a exponential fashion as expec
           xmax=22,
           ylabel={t [s]},
           xlabel={p}]
-          \addplot table [x=p, y=tr, col sep=comma] {data/results.csv};
+          \addplot+[color=blue] table [x=p, y=tr, col sep=comma] {data/results_means.csv};
+        \addplot+[
+          color=blue,
+          name path=hi
+        ] table [x index=0, y expr=\thisrowno{1} + \thisrowno{4}, col sep=comma] {data/results_means_var.csv};
+        \addplot+[
+          color=blue,
+          name path=lo
+        ] table [x index=0, y expr=\thisrowno{1} - \thisrowno{4}, col sep=comma] {data/results_means_var.csv};
+        \addplot+[color=blue, opacity=0.5] fill between [of=hi and lo];
         \end{axis}
       \end{tikzpicture}
     \caption{Execution time for reading the data in parallel}
@@ -92,7 +124,7 @@ We can see that the computation time decreases in a exponential fashion as expec
         xmax=22,
         ylabel={t [s]},
         xlabel={p}]
-        \addplot table [x=p, y=tt, col sep=comma] {data/parallel_speedup.csv};
+        \addplot table [x index=0, y index=1, col sep=comma] {data/parallel_speedup.csv};
       \end{axis}
     \end{tikzpicture}
     \caption{Absolute parallel speedup}
@@ -106,7 +138,7 @@ We can see that the computation time decreases in a exponential fashion as expec
         xmax=22,
         ylabel={t [s]},
         xlabel={p}]
-        \addplot table [x=p, y=rtt, col sep=comma] {data/parallel_speedup.csv};
+        \addplot table [x index=0, y index=2, col sep=comma] {data/parallel_speedup.csv};
       \end{axis}
     \end{tikzpicture}
     \caption{Relative parallel speedup}

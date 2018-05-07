@@ -110,7 +110,8 @@ The reduction of the calculation time will therefore affect the overall computat
 more than the increasing communication time.
 
 \Cref{alg:parlloyds} shows the minor change to make \cref{alg:lloyds} into a parallel algorithm.
-
+The main idea is to distribute the data set over all the processors
+and allow them to classify their local data points in parallel.
 
 \begin{algorithm}[!ht]
 
