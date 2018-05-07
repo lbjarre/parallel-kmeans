@@ -16,6 +16,9 @@
 \usepackage{graphicx}
 \usepackage{subcaption}
 
+\usepackage{tikz}
+\usepackage{pgfplots}
+
 \geometry{
   top=2cm,
   bottom=2cm,
@@ -30,3 +33,16 @@
 \DeclareMathOperator*{\argmin}{arg\,min}
 
 \DontPrintSemicolon
+
+\pgfplotsset{
+  compat=1.13,
+  every axis/.prefix style={
+    width=\textwidth,
+    height=.8\textwidth,
+    legend cell align=left
+  },
+  every axis plot/.style={
+    no marks,
+    line width=.8pt
+  }
+}

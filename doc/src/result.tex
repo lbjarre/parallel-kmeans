@@ -14,6 +14,83 @@
     \begin{subfigure}[t]{1\textwidth}
         \centering
         \includegraphics[width=.9\textwidth]{doc/out.png}
-        \caption{After k-means compression}
+        \caption{After k-means compression $k=24$}
     \end{subfigure}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+  \begin{subfigure}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \begin{axis}[
+        xmin=1,
+        xmax=22,
+        ylabel={t [s]},
+        xlabel={p}]
+        \addplot table [x=p, y=tt, col sep=comma] {data/results.csv};
+      \end{axis}
+    \end{tikzpicture}
+    \caption{Total execution time}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[t]{0.5\textwidth}
+    \centering
+      \begin{tikzpicture}
+        \begin{axis}[
+          xmin=1,
+          xmax=22,
+          ylabel={t [s]},
+          xlabel={p}]
+          \addplot table [x=p, y=tc, col sep=comma] {data/results.csv};
+        \end{axis}
+      \end{tikzpicture}
+    \caption{Execution time for k-means parallel}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[t]{0.5\textwidth}
+    \centering
+      \begin{tikzpicture}
+        \begin{axis}[
+          xmin=1,
+          xmax=22,
+          ylabel={t [s]},
+          xlabel={p}]
+          \addplot table [x=p, y=tr, col sep=comma] {data/results.csv};
+        \end{axis}
+      \end{tikzpicture}
+    \caption{Execution time for reading the data in parallel}
+  \end{subfigure}
+  \label{fig:time_read}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+  \begin{subfigure}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \begin{axis}[
+        xmin=1,
+        xmax=22,
+        ylabel={t [s]},
+        xlabel={p}]
+        \addplot table [x=p, y=tt, col sep=comma] {data/parallel_speedup.csv};
+      \end{axis}
+    \end{tikzpicture}
+    \caption{Absolute parallel speedup}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \begin{axis}[
+        xmin=1,
+        xmax=22,
+        ylabel={t [s]},
+        xlabel={p}]
+        \addplot table [x=p, y=rtt, col sep=comma] {data/parallel_speedup.csv};
+      \end{axis}
+    \end{tikzpicture}
+    \caption{Relative parallel speedup}
+  \end{subfigure}
 \end{figure}
