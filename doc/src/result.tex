@@ -39,7 +39,17 @@ which are plotted as the area in the figure.
 We can see that the computation time decreases in a exponential fashion as expected.
 
 \begin{table}[!ht]
-
+  \centering
+  \pgfplotstabletypeset[
+    col sep=comma,
+    header=true,
+    columns={p, tt, tts},
+    columns/p/.style={column name=Processes},
+    columns/tt/.style={column name=$T_\text{comp}$},
+    columns/tts/.style={column name=$\sigma$},
+    every head row/.style={before row=\toprule, after row=\midrule}, 
+    every last row/.style={after row=\bottomrule}
+  ]{data/results_means_var.csv}
 \end{table}
 
 \begin{figure}[!ht]
