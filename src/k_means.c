@@ -116,6 +116,8 @@ double ** k_means(double **x, const int dim_x, const int len_x, const int k)
         }
     } while (not_converged && iter++ < 1000);
 
+    free(m_next);
+
     return m;
 }
 
