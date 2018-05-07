@@ -79,7 +79,7 @@ double ** k_means_parallel(double **x, const int k, const int dim, const int len
         m_[i] = calloc(dim, sizeof *m);
     }
 
-    if (P >= k) {
+    if (P > k) {
         init_p_geq_k(m, x, k, dim, len, p);
     }
     else {
