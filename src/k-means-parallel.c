@@ -10,6 +10,54 @@
 #define min(x, y) ( (x < y) ? x : y )
 #define max(x, y) ( (x > y) ? x : y )
 
+
+void init_p_geq_k(double **m, double **x, const int k, const int dim, const int len, const int p)
+{
+    int index;
+    
+    if (p < k) {
+        
+        index = rand() / (RAND_MAX / len);
+        
+        for (int i = 0; i < dim; ++i) {
+            m[p][i] = x[index][i];
+        }
+    
+    }
+
+    for (int i = 0; i < k; ++i) {
+        MPI_Bcast(m[i], dim, MPI_DOUBLE, k, MPI_COMM_WORLD);
+    }
+
+}
+
+
+void init_p_lt_k(double **m, double **x, const int k, const int dim, const int len, const int p, const int P)
+{
+    int L = (int) floor(k / P);
+    int R = (int) k % P;
+    int I = (int) (p + 1) * L + min(p + 1, R);
+
+    for (int i = p * L + min(p, R); i < I; ++i) {
+        
+        int index = rand() / (RAND_MAX / len);
+        
+        for (int j = 0; j < dim; ++j) {
+            m[i][j] = x[index][j];
+        }
+    
+    }
+
+    for (int i = 0; i < k; ++i) {
+        
+        int r = max( floor(i / (L + 1)), floor((i - R) / L) );
+        MPI_Bcast(m[i], dim, MPI_DOUBLE, r, MPI_COMM_WORLD);
+    
+    }
+
+}
+
+
 double ** k_means_parallel(double **x, const int k, const int dim, const int len, const int p, const int P)
 {
     double **m, **m_;
@@ -31,26 +79,11 @@ double ** k_means_parallel(double **x, const int k, const int dim, const int len
         m_[i] = calloc(dim, sizeof *m);
     }
 
-    /*
-        The first k processors decide the starting positions of the class means
-        and communicates this to the rest of the processors
-    */
-
-    int L = (int) floor(k / P);
-    int R = (int) k % P;
-    int I = (int) (p + 1) * L + min(p + 1, R);
-
-    for (int i = p * L + min(p, R); i < I; ++i) {
-        int index = rand() / (RAND_MAX / len);
-        for (int j = 0; j < dim; ++j) {
-            m[i][j] = x[index][j];
-        }
+    if (P >= k) {
+        init_p_geq_k(m, x, k, dim, len, p);
     }
-
-    printf("es before bcast\n");
-    for (int i = 0; i < k; ++i) {
-        int r = max( floor(i / (L + 1)), floor((i - R) / L) );
-        MPI_Bcast(m[i], dim, MPI_DOUBLE, r, MPI_COMM_WORLD);
+    else {
+        init_p_lt_k(m, x, k, dim, len, p, P);
     }
 
     /*
@@ -127,6 +160,8 @@ double ** k_means_parallel(double **x, const int k, const int dim, const int len
         }
 
     } while (not_converged && iter++ < MAX_ITER);
+
+    free(m_);
 
     return m;
 
