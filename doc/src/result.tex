@@ -47,7 +47,7 @@ We can see that the computation time decreases in a exponential fashion as expec
     columns/p/.style={column name=Processes},
     columns/tt/.style={column name=$T_\text{comp}$},
     columns/tts/.style={column name=$\sigma$},
-    every head row/.style={before row=\toprule, after row=\midrule}, 
+    every head row/.style={before row=\toprule, after row=\midrule},
     every last row/.style={after row=\bottomrule}
   ]{data/results_means_var.csv}
 \end{table}
@@ -157,4 +157,5 @@ We can see that the computation time decreases in a exponential fashion as expec
     \end{tikzpicture}
     \caption{Relative parallel speedup}
   \end{subfigure}
+  \label{fig:speedup}
 \end{figure}
