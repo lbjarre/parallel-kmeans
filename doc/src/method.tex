@@ -1,0 +1,9 @@
+% method section
+
+\subsection{Reading data}
+
+Runs of early versions of the code indicated that reading the file sequentially and scattering the data to the processes took too long. A solution for reading the data in parallel was developed so the sequential read time would not become a bottleneck for the code. For this, MPI IO's function MPI\_File\_read\_at\_all() was utilized. However, since the function reads bytes in a document rather than rows, the data was pre-formatted such that all indides of a column were the same length. Each process then reads the first row to count how many characters are in a line. This allows calculating how many characters the different processes should read, $n_{p}$, by performing the following calculations:
+\begin{equation}
+    n_{p} =  \frac{N + P - p - 1}{P} l
+\end{equation}
+where $N$ is the total number of lines in the file, $P$ is the number of processes, $p$ is the rank of the process and $l$ is the length of a row. Once read, each process converts the contents of its partition into floats and stores the result in an array.
