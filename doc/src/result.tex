@@ -1,22 +1,40 @@
 % results part
 
-\section{Results}
-
 \subsection{Image compression}
 
-\begin{figure}[ht!]
+In \cref{fig:imagecompr} both the original image used as the input data
+and the resulting image after the $k$-means clusters had been found
+for $k = 24$ and $k = 10$.
+
+\begin{figure}[!ht]
     \centering
     \begin{subfigure}[t]{1\textwidth}
         \centering
         \includegraphics[width=.9\textwidth]{doc/bad-water-good-light-wallpaper.jpg}
-        \caption{Before k-means compression}
+        \caption{Before $k$-means compression}
     \end{subfigure}
     \begin{subfigure}[t]{1\textwidth}
         \centering
         \includegraphics[width=.9\textwidth]{doc/out.png}
-        \caption{After k-means compression $k=24$}
+        \caption{After $k$-means compression with $k = 24$ clusters}
     \end{subfigure}
+    \begin{subfigure}[t]{\textwidth}
+        \centering
+        \includegraphics[width=.9\textwidth]{doc/out2.png}
+        \caption{After $k$-means clustering with $k = 10$ clusters}
+    \end{subfigure}
+    \caption{The input image and its outputs after clustering}
+    \label{fig:imagecompr}
 \end{figure}
+
+\subsection{Computation time}
+
+\Cref{fig:time_read} shows the elapsed time during the computations on the picter done at Tegner
+for increasing ammount of processes.
+The image seen in \cref{fig:imagecompr} was used as the input for all of the plotted times with $k$ set to 10.
+For $p = 1$ the serial version of Lloyd's algorithm, \cref{alg:lloyds}, was used,
+while for all $p > 1$ the parallel version, \cref{alg:parlloyds}, were used.
+We can see that the computation time decreases in a exponential fashion as expected.
 
 \begin{figure}[!ht]
   \centering
@@ -28,7 +46,7 @@
         xmax=22,
         ylabel={t [s]},
         xlabel={p}]
-        \addplot table [x=p, y=tt, col sep=comma] {data/results.csv};
+        \addplot table [x=p, y expr=\thisrowno{1} + \thisrowno{2}, col sep=comma] {data/results.csv};
       \end{axis}
     \end{tikzpicture}
     \caption{Total execution time}
@@ -45,7 +63,7 @@
           \addplot table [x=p, y=tc, col sep=comma] {data/results.csv};
         \end{axis}
       \end{tikzpicture}
-    \caption{Execution time for k-means parallel}
+    \caption{Execution time for $k$-means parallel}
   \end{subfigure}
   ~
   \begin{subfigure}[t]{0.5\textwidth}
