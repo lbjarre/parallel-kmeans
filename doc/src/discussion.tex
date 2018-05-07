@@ -1,0 +1,5 @@
+% discussion
+
+We have presented a parallel implementation of the famous k-means algorithm. The preformance of the algorithm is accelerated when used with more processes, however there is a drop off in relative performance the more proceeses are used. It therefor follows the expected behaviour according to Amdahl's law. However, since the kernels are randomly initiated and the algorithm runs until convergence the measurements are not completely reliable. We decided to run the algorithm multiple times and calculte a mean and a variance but we only had time to run the algorithm approximately 5 times for each setting which proved insufficient. This especially obvious in figure \ref{mean_var} for $p=8$ This in combination with time's standard settings only showing seconds means that the results re affected by rounding errors. This can be seen especially in figure \ref{mean_var} where $p=18$ has zero standard deviation.
+
+Another noteworthy feature of k-means that we discovered when we ran the algorithm on an image was that it was compressed. The resulting image file was compressed to approximately $\frac{1}{4}$ of its original size.
