@@ -1,0 +1,21 @@
+
+Data: data/image_data.csv
+Number of points: 72248032
+Number of dimensions: 3
+Number of clusters: 10
+Number of processes: 8
+Running parallel...
+es before reading now
+es before reading now
+es before reading now
+es before reading now
+es before reading now
+es before reading now
+es before reading now
+es before reading now
+es time to do shietes time to do shietes time to do shietes time to do shietes time to do shietes time to do shietes time to do shietes time to do shietwhattupwhattupwhattupwhattupwhattupwhattupwhattupwhattupTime for read file: 10 seconds 
+Time for calc k-means: 43 seconds 
+
+real	0m54.257s
+user	0m0.108s
+sys	0m0.069s
