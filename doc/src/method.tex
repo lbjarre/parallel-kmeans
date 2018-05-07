@@ -1,5 +1,15 @@
 % method section
 
+\subsection{Input data}
+
+$k$-means clustering is not strictly limited to any type of input data.
+However, a use case large enough to motivate the use of a parallel environment was wanted.
+A simple way of making the input data large is to use large pictures,
+where the clustering method is working to cluster pixels into representative colors.
+Altough containing just 3 dimensions for the color channels in the pictures,
+pixel density can easily reach extremely large ranges.
+This project settled on a 72-megapixel image which can be seen in \cref{fig:imagecompr}.
+
 \subsection{Reading data}
 
 Runs of early versions of the code indicated that reading the file sequentially and scattering the data to the processes took too long. A solution for reading the data in parallel was developed so the sequential read time would not become a bottleneck for the code. For this, MPI IO's function MPI\_File\_read\_at\_all() was utilized. However, since the function reads bytes in a document rather than rows, the data was pre-formatted such that all indides of a column were the same length. Each process then reads the first row to count how many characters are in a line. This allows calculating how many characters the different processes should read, $n_{p}$, by performing the following calculations:
