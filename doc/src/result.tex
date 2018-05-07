@@ -29,7 +29,8 @@ for $k = 24$ and $k = 10$.
 
 \subsection{Computation time}
 
-\Cref{fig:time_read} shows the elapsed time during the computations on the picter done at Tegner
+\Cref{tab:comptime} and \cref{fig:time_read}
+shows the elapsed time during the computations on the picter done at Tegner
 for increasing ammount of processes.
 The image seen in \cref{fig:imagecompr} was used as the input for all of the plotted times with $k$ set to 10.
 For $p = 1$ the serial version of Lloyd's algorithm, \cref{alg:lloyds}, was used,
@@ -40,6 +41,8 @@ We can see that the computation time decreases in a exponential fashion as expec
 
 \begin{table}[!ht]
   \centering
+  \caption{Computational time for the parallel implementation}
+  \label{tab:comptime}
   \pgfplotstabletypeset[
     col sep=comma,
     header=true,
