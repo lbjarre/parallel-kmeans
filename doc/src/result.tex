@@ -52,7 +52,7 @@ We can see that the computation time decreases in a exponential fashion as expec
     columns/tts/.style={column name=$\sigma$},
     every head row/.style={before row=\toprule, after row=\midrule},
     every last row/.style={after row=\bottomrule}
-  ]{data/results_means_var.csv}
+  ]{data/report/results_means_var.csv}
 \end{table}
 
 \begin{figure}[!ht]
@@ -67,15 +67,15 @@ We can see that the computation time decreases in a exponential fashion as expec
         xlabel={p}]
         \addplot+[
           color=blue
-        ] table [x=p, y=tt, col sep=comma] {data/results_means.csv};
+        ] table [x=p, y=tt, col sep=comma] {data/report/results_means.csv};
         \addplot+[
           color=blue,
           name path=hi
-        ] table [x index=0, y expr=\thisrowno{3} + \thisrowno{6}, col sep=comma] {data/results_means_var.csv};
+        ] table [x index=0, y expr=\thisrowno{3} + \thisrowno{6}, col sep=comma] {data/report/results_means_var.csv};
         \addplot+[
           color=blue,
           name path=lo
-        ] table [x index=0, y expr=\thisrowno{3} - \thisrowno{6}, col sep=comma] {data/results_means_var.csv};
+        ] table [x index=0, y expr=\thisrowno{3} - \thisrowno{6}, col sep=comma] {data/report/results_means_var.csv};
         \addplot+[color=blue, opacity=0.5] fill between [of=hi and lo];
       \end{axis}
     \end{tikzpicture}
@@ -91,15 +91,15 @@ We can see that the computation time decreases in a exponential fashion as expec
           xmax=22,
           ylabel={t [s]},
           xlabel={p}]
-          \addplot+[color=blue] table [x=p, y=tc, col sep=comma] {data/results_means.csv};
+          \addplot+[color=blue] table [x=p, y=tc, col sep=comma] {data/report/results_means.csv};
         \addplot+[
           color=blue,
           name path=hi
-        ] table [x index=0, y expr=\thisrowno{2} + \thisrowno{5}, col sep=comma] {data/results_means_var.csv};
+        ] table [x index=0, y expr=\thisrowno{2} + \thisrowno{5}, col sep=comma] {data/report/results_means_var.csv};
         \addplot+[
           color=blue,
           name path=lo
-        ] table [x index=0, y expr=\thisrowno{2} - \thisrowno{5}, col sep=comma] {data/results_means_var.csv};
+        ] table [x index=0, y expr=\thisrowno{2} - \thisrowno{5}, col sep=comma] {data/report/results_means_var.csv};
         \addplot+[color=blue, opacity=0.5] fill between [of=hi and lo];
         \end{axis}
       \end{tikzpicture}
@@ -114,15 +114,15 @@ We can see that the computation time decreases in a exponential fashion as expec
           xmax=22,
           ylabel={t [s]},
           xlabel={p}]
-          \addplot+[color=blue] table [x=p, y=tr, col sep=comma] {data/results_means.csv};
+          \addplot+[color=blue] table [x=p, y=tr, col sep=comma] {data/report/results_means.csv};
         \addplot+[
           color=blue,
           name path=hi
-        ] table [x index=0, y expr=\thisrowno{1} + \thisrowno{4}, col sep=comma] {data/results_means_var.csv};
+        ] table [x index=0, y expr=\thisrowno{1} + \thisrowno{4}, col sep=comma] {data/report/results_means_var.csv};
         \addplot+[
           color=blue,
           name path=lo
-        ] table [x index=0, y expr=\thisrowno{1} - \thisrowno{4}, col sep=comma] {data/results_means_var.csv};
+        ] table [x index=0, y expr=\thisrowno{1} - \thisrowno{4}, col sep=comma] {data/report/results_means_var.csv};
         \addplot+[color=blue, opacity=0.5] fill between [of=hi and lo];
         \end{axis}
       \end{tikzpicture}
@@ -142,7 +142,7 @@ We can see that the computation time decreases in a exponential fashion as expec
         xmax=22,
         ylabel={t [s]},
         xlabel={p}]
-        \addplot table [x index=0, y index=1, col sep=comma] {data/parallel_speedup.csv};
+        \addplot table [x index=0, y index=1, col sep=comma] {data/report/parallel_speedup.csv};
       \end{axis}
     \end{tikzpicture}
     \caption{Absolute parallel speedup}
@@ -156,7 +156,7 @@ We can see that the computation time decreases in a exponential fashion as expec
         xmax=22,
         ylabel={t [s]},
         xlabel={p}]
-        \addplot table [x index=0, y index=2, col sep=comma] {data/parallel_speedup.csv};
+        \addplot table [x index=0, y index=2, col sep=comma] {data/report/parallel_speedup.csv};
       \end{axis}
     \end{tikzpicture}
     \caption{Relative parallel speedup}

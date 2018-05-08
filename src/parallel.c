@@ -87,8 +87,6 @@ int main(int argc, char **argv)
 
   I = (len_x + P - p - 1) / P;
 
-  printf("es before reading now\n");
-
   if (p==0) {start_time = time(NULL);}
   x = read_parallel_csv(fp, p, P, overlap, len_x, dim_x, I);
 
@@ -107,14 +105,15 @@ int main(int argc, char **argv)
       printf("p: %d, k: %d, k[%d]: %f\n", p, i, j, m[i][j]);
     }
   }
+  */
 
   int* closest_means;
   closest_means = assign_nearest_cluster(x, m, k, dim_x, I);
 
   const char* fname = "out.dat";
-  printf("%d\n",I);
-  //parallel_print_to_file(fname, closest_means, m, I, dim_x, k, p, P);
-  */
+
+  parallel_print_to_file(fname, closest_means, m, I, dim_x, k, p, P);
+
 
   rc = MPI_Finalize();
   return 0;

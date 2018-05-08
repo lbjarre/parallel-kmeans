@@ -14,15 +14,15 @@
 void init_p_geq_k(double **m, double **x, const int k, const int dim, const int len, const int p)
 {
     int index;
-    
+
     if (p < k) {
-        
+
         index = rand() / (RAND_MAX / len);
-        
+
         for (int i = 0; i < dim; ++i) {
             m[p][i] = x[index][i];
         }
-    
+
     }
 
     for (int i = 0; i < k; ++i) {
@@ -39,20 +39,20 @@ void init_p_lt_k(double **m, double **x, const int k, const int dim, const int l
     int I = (int) (p + 1) * L + min(p + 1, R);
 
     for (int i = p * L + min(p, R); i < I; ++i) {
-        
+
         int index = rand() / (RAND_MAX / len);
-        
+
         for (int j = 0; j < dim; ++j) {
             m[i][j] = x[index][j];
         }
-    
+
     }
 
     for (int i = 0; i < k; ++i) {
-        
+
         int r = max( floor(i / (L + 1)), floor((i - R) / L) );
         MPI_Bcast(m[i], dim, MPI_DOUBLE, r, MPI_COMM_WORLD);
-    
+
     }
 
 }
@@ -64,8 +64,6 @@ double ** k_means_parallel(double **x, const int k, const int dim, const int len
     int k_count[k];
     int iter = 0;
     int not_converged = 1;
-
-    printf("es time to do shiet\n");
 
     /*
         Initialization and allocation of the class means
@@ -89,8 +87,6 @@ double ** k_means_parallel(double **x, const int k, const int dim, const int len
     /*
         Main procedure loop
     */
-
-    printf("whattup\n");
 
     int class;
 

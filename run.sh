@@ -7,5 +7,4 @@ else
 fi
 
 # Kmeans: path - xdim - xlen - K
-time mpirun -np 2 bin/$binfile data/image_data.csv 3 315172 2
-
+time mpirun -np 2 bin/$binfile data/image_data.csv 3 72248032 10

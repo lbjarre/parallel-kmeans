@@ -16,21 +16,19 @@ for i in range(int(k)):
     temp = temp.split(",")
     colors.append([np.uint8(float(x)) for x in temp])
 
-#image = np.array(f).reshape(int(sys.argv[1]),int(sys.argv[2]))
+# image = np.array(f).reshape(int(sys.argv[1]),int(sys.argv[2]))
 
 f = list(map(int, f))
 
 colored_image = np.array([colors[i] for i in f])
-print(colored_image[:5])
-print(colored_image.reshape(int(sys.argv[1]),int(sys.argv[2]),3)[0,:5,:])
 
-fig = plt.figure()
-plt.imshow(colored_image.reshape(int(sys.argv[1]),int(sys.argv[2]),3))
+print(colored_image.reshape(int(sys.argv[1]), int(sys.argv[2]), 3)[0, :5, :])
 
-
-im = Image.fromarray(colored_image.reshape(int(sys.argv[1]),int(sys.argv[2]),3))
+im = Image.fromarray(colored_image.reshape(int(sys.argv[1]), int(sys.argv[2]), 3))
 im.save("out.png")
 
+#fig = plt.figure()
+#plt.imshow(colored_image.reshape(int(sys.argv[1]), int(sys.argv[2]), 3))
 
 """
 F = []
