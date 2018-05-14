@@ -9,6 +9,6 @@ Instructions:
 
 2. Make
 
-3. run.sh (edit the file to change the run settings (how many processes, how many clusters)
+3. run.sh (edit the file to change the run settings (how many processes, how many clusters, etc)
 
 4. post-process.sh
